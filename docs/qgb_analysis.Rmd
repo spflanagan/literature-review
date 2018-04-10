@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE,out.extra='',fig.pos="H")
 knitr::opts_knit$set(root.dir='../qgb_data/')
 ```
 ```{r original_file}
+source("../R/literature-review.R")
 library(knitr)
 orig.file<-data.frame(read.delim("qgb.txt",sep='\t',quote=""),stringsAsFactors = FALSE)
 ```
@@ -23,10 +24,8 @@ The web of science search resulted in `r nrow(orig.file)` publications, which I 
 ```{r annotated_file}
 qgb<-data.frame(read.csv("qgb.csv",header = TRUE),stringsAsFactors = FALSE)
 qgb<-qgb[qgb$Human != "human",]
-rmvec<-unlist(lapply(c("none","not relevant","not behavior","not a behavior","not quantitative genetics","meeting abstract",
-                       "not useful","plant","no abstract","just the abstract"),
-              grep,x=qgb$Relevance.to.article))
-qgb<-qgb[-rmvec,]
+qgb<-search_line(c("none","not relevant","not behavior","not a behavior","not quantitative genetics","meeting abstract",
+                       "not useful","plant","no abstract","just the abstract"),"Relevance.to.article",qgb,inverse = TRUE)
 ```
 
 This annotated file contained `r nrow(qgb)` entries after the pruning mentioned above. 
@@ -65,22 +64,20 @@ How are these studies distributed across species/taxa/classes?
 
 ```{r species}
 kable(table(factor(exp$species))[order(table(factor(exp$species)),decreasing = TRUE)],col.names = c("Species name","Number of studies"))
+kable(table(factor(exp$common.name))[order(table(factor(exp$common.name)),decreasing = TRUE)],col.names = c("Common name","Number of studies"))
+kable(table(factor(exp$Class))[order(table(factor(exp$Class)),decreasing = TRUE)],col.names = c("Class","Number of studies"))
+
+# Creating a table in the format that I want, with class and species and number of studies.
 spp<-data.frame(table(factor(exp$species))[order(table(factor(exp$species)),decreasing = TRUE)])
 colnames(spp)<-c("Species","Number.of.studies")
 spp$Class<-unlist(lapply(spp$Species,function(sp,df){
   unique(df[df$species %in% sp,"Class"])
 },df=exp))
-
-kable(table(factor(exp$common.name))[order(table(factor(exp$common.name)),decreasing = TRUE)],col.names = c("Common name","Number of studies"))
-kable(table(factor(exp$Class))[order(table(factor(exp$Class)),decreasing = TRUE)],col.names = c("Class","Number of studies"))
-
 cls<-data.frame(table(factor(exp$Class))[order(table(factor(exp$Class)),decreasing = TRUE)])
 colnames(cls)<-c("Class","Number.of.studies")
 cls<-data.frame(Species="All",Number.of.studies=cls$Number.of.studies,Class=cls$Class,stringsAsFactors = FALSE)
 spcl<-data.frame(rbind(spp,cls),stringsAsFactors = FALSE)
 write.table(spcl[order(spcl$Class,spcl$Number.of.studies,decreasing=TRUE),c(3,1,2)],"qgbSpeciesClass.csv",row.names=FALSE,sep=",")
-
-
 
 ```
 
@@ -114,7 +111,7 @@ kable(table(factor(pexp$Class))[order(table(factor(pexp$Class)),decreasing = TRU
 pery<-data.frame(table(pers$PY))
 colnames(pery)<-c("Year","NumPapers")
 
-png("Personality_Timeline.png",height=4,width=6,units="in",res=300)
+png("figs/Personality_Timeline.png",height=4,width=6,units="in",res=300)
 par(mar=c(4,4,2,2))
 plot(as.numeric(as.character(pery$Year)),pery$NumPapers,bty='l',xlab="Year",ylab="Number of Papers",
      xaxt='n',pch=19,las=1)
@@ -124,7 +121,15 @@ text(x=seq(min(as.numeric(as.character(pery$Year))),max(as.numeric(as.character(
 dev.off()
 ```
 
-![Personality Timeline](../qgb_data/Personality_Timeline.png)
+![Personality Timeline](../qgb_data/figs/Personality_Timeline.png)
+
+Can I pull out studies that estimated heritability? I think I have to go through the papers themselves to do that.
+
+```{r personality_heritability}
+pers.h2<-search_line(c("heritability"," h ","h2"),"AB",pexp)
+pers.not.h2<-search_line(c("heritability"," h ","h2"),"AB",pexp,inverse = TRUE)
+
+```
 
 # Creating demonstration figures
 
