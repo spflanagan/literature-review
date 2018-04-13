@@ -81,6 +81,15 @@ write.table(spcl[order(spcl$Class,spcl$Number.of.studies,decreasing=TRUE),c(3,1,
 
 ```
 
+## Experimental design
+
+What experimental designs were used, and how frequently?
+
+```{r exp_design}
+
+
+```
+
 ## Personality
 
 Let's focus on personality studies
