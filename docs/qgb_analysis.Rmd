@@ -49,7 +49,7 @@ Of those, `r nrow(syn)` were review, synthesis, commentaries, and meta-analyses.
 Of the experimental ones, how do they break down into categories? These categories are not mutually exclusive, and any one study may belong to multiple categories.
 
 ```{r categories}
-cats<-apply(exp[,15:(ncol(exp)-1)],2,function(c){ length(c[c!=""])})
+cats<-apply(exp[,16:(ncol(exp)-1)],2,function(c){ length(c[c!=""])})
 kable(cats[order(cats,decreasing = TRUE)],col.names = "Number of studies")
 write.table(cats[order(cats,decreasing = TRUE)],"QGB_categories.csv",sep=",")
 ```
