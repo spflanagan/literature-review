@@ -316,7 +316,7 @@ kable(data.frame(names(cnt),cnt,prp,stringsAsFactors = FALSE),
 ```{r years_plot}
 png("figs/YearPlots.png",height=6,width=6,res=300,units="in")
 par(mfrow=c(2,1),mar=c(0.5,2,1,2),oma=c(2,2,2,2))
-cols<-c('#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4')
+cols<-color[1:ncol(yrs)]
 bp<-barplot(t(yrs),col=cols,border = NA,axes=FALSE,xaxt='n')
 legend(x = -1,y=31,c("Parent-offspring regression","Sibling designs","Clones","Cross-classified designs",
                      "Selection experiments","Complex relatedness","Other designs", "Genetics"),
