@@ -15,6 +15,7 @@ knitr::opts_knit$set(root.dir='../qgb_data/')
 ```
 ```{r original_file}
 source("../R/literature-review.R")
+library(scales)
 library(knitr)
 orig.file<-data.frame(read.delim("qgb.txt",sep='\t',quote=""),stringsAsFactors = FALSE)
 ```
@@ -44,19 +45,121 @@ exp<-exp[-models[!duplicated(models)],]
 
 Of those, `r nrow(syn)` were review, synthesis, commentaries, and meta-analyses. `r nrow(mod)` papers were theoretical or statistical models, and the remaining `r nrow(exp)` were laboratory or field estimates of quantitative genetic parameters of behavioral phenotypes. 
 
-## Categories
+## Experimental design
 
-Of the experimental ones, how do they break down into categories? These categories are not mutually exclusive, and any one study may belong to multiple categories.
+What experimental designs were used, and how frequently?
 
-```{r categories}
-cats<-apply(exp[,16:(ncol(exp)-1)],2,function(c){ length(c[c!=""])})
-kable(cats[order(cats,decreasing = TRUE)],col.names = "Number of studies")
-write.table(cats[order(cats,decreasing = TRUE)],"QGB_categories.csv",sep=",")
+```{r exp_design}
+paroff<-count_lines(keywords = "parent-offspring regression",column.name = "Method.classification",dat=exp)
+#sibs
+fullsib<-count_lines(keywords = "full-sib",column.name = "Method.classification",dat=exp,
+                    remwords=c("cross-foster","common-garden","half/","selection"))
+halfsib<-count_lines(keywords = "half-sib",column.name = "Method.classification",dat=exp,
+                    remwords=c("cross-foster","common-garden","/full","selection"))
+halfful<-count_lines(keywords = "half/full-sib",column.name = "Method.classification",dat=exp,
+                    remwords=c("cross-foster","common-garden","selection"))
+crfossib<-count_lines(keywords = "cross-foster",column.name = "Method.classification",dat=exp,
+                      remwords=c("pedigree","F2"))
+cgsib<-count_lines(keywords = "common-garden",column.name = "Method.classification",dat=exp)
+#clones                     
+clones<-count_lines(keywords = "clones",column.name = "Method.classification",dat=exp)
+#cross-classified
+factorial<-count_lines(keywords = "factorial",column.name = "Method.classification",dat=exp)
+diallel<-count_lines(keywords = "diallel",column.name = "Method.classification",dat=exp)
+backcross<-count_lines(keywords = "backcross",column.name = "Method.classification",dat=exp)
+reciprocal<-count_lines(keywords = c("reciprocal","recirpocal"),column.name = "Method.classification",
+                        dat=exp,"selection")
+inbred<-count_lines(keywords = c("inbred","F\\d+"),column.name = "Method.classification",dat=exp,
+                    remwords=c("backcross","reciprocal"))
+crsfosf2<-count_lines(keywords = "cross-foster.*F2",column.name = "Method.classification",dat=exp)
+#selection
+selection<-count_lines(keywords =c("experiment", "selection"),column.name = "Method.classification",dat=exp)
+#relatedness
+pedigree<-count_lines(keywords = "pedigree",column.name = "Method.classification",dat=exp)
+relatedness<-count_lines(keywords = "relatedness",column.name = "Method.classification",dat=exp)
+#other
+phenotype<-count_lines(keywords = "phenotypes",column.name = "Method.classification",dat=exp)
+repeatability<-count_lines(keywords = "repeatability",column.name = "Method.classification",dat=exp)
+other<-count_lines(".*","Method.classification",exp,
+                   remwords=c("parent-offspring regression","full-sib","half-sib","half/full-sib",
+                              "cross-foster","common-garden","clones","factorial","diallel","inbred",
+                              "selection","pedigree","relatedness","QTL","GWAS","reciprocal",
+                              "backcross","recirpocal","experiment","phenotype","repeatability","F\\d+"))
+#QTL/GWAS
+qtl<-count_lines(keywords = "QTL",column.name = "Method.classification",dat=exp)
+gwas<-count_lines(keywords = "GWAS",column.name = "Method.classification",dat=exp)
+
+kable(data.frame(Experiment=c("Parent-offspring Regression","Full-sib","Half-sib",
+                              "Half and full-sib","Cross foster","Common garden",
+                              "clones","factorial","inbred","backcross","reciprocal",
+                              "diallel","selection","pedigree","relatedness","phenotype",
+                              "repeatability","other","qtl","gwas"),
+                 Counts=c(paroff,fullsib,halfsib,halfful,crfossib,cgsib,
+                          clones,factorial,diallel,backcross,reciprocal,
+                          inbred,selection,pedigree,relatedness,phenotype,
+                          repeatability, other,qtl,gwas)))
 ```
 
-"Reproduction and Fecundity" includes reproductive success and reproductive strategies, such as asexual/sexual/hermaphroditic sexual systems, monogamy vs polygyny, alternative mate choice tactics, oviposition/nesting preferences and timing, egg and milk production traits, physiological effects of mating, and other fecundity-related phenotypes. "Mate choice and sexual selection" includes pre and postcopulatory selective episodes as well as elements of display traits (e.g., male song in crickets) and female preferences. 
+```{r}
+regression<-search_line(keywords = "parent-offspring regression",column.name = "Method.classification",dat=exp)
+#sibs
+sibs<-search_line(keywords = c("cross-foster","sib","common-garden"),
+                  column.name = "Method.classification",dat=exp,
+                    remwords=c("pedigree","F2","selection","experiment"))
+#clones                     
+clones<-search_line(keywords = "clones",column.name = "Method.classification",dat=exp)
+#cross-classified
+crosses<-search_line(keywords = c("factorial","diallel","backcross","reciprocal","recirpocal",
+                                  "inbred","F\\d+", "cross-foster.*F2"),
+                     column.name = "Method.classification",dat=exp)
+#selection
+selection<-search_line(keywords =c("experiment", "selection"),column.name = "Method.classification",dat=exp)
+#relatedness
+complex<-search_line(keywords = c("pedigree","relatedness"),column.name = "Method.classification",dat=exp)
+#other
+other<-search_line(c(".*","phenotypes","repeatability"),"Method.classification",exp,
+                   remwords=c("parent-offspring regression","full-sib","half-sib","half/full-sib",
+                              "cross-foster","common-garden","clones","factorial","diallel","inbred",
+                              "selection","pedigree","relatedness","QTL","GWAS","reciprocal",
+                              "backcross","recirpocal","experiment","F\\d+"))
+#genetics
+genetics<-search_line(keywords = c("QTL","GWAS"),column.name = "Method.classification",dat=exp)
 
-Clearly personality traits have been widely studied.
+
+#plot it
+yrs<-do.call(rbind,lapply(levels(factor(exp$PY)),function(year){
+  df<-data.frame(ParentOffspringRegression=nrow(regression[regression$PY==year,]),
+                 Sibs=nrow(sibs[sibs$PY==year,]),
+                 Clones=nrow(clones[clones$PY==year,]),
+                 CrossClassifiedDesigns=nrow(crosses[crosses$PY==year,]),
+                 Selection=nrow(selection[selection$PY==year,]),
+                 ComplexRelatedness=nrow(complex[complex$PY==year,]),
+                 OtherDesigns=nrow(other[other$PY==year,]),
+                 Genetics=nrow(genetics[genetics$PY==year,]))
+}))
+rownames(yrs)<-levels(factor(exp$PY))
+cols<-c('#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4')
+names(cols)<-colnames(yrs)
+ltys<-c(1:6,2,3)
+names(ltys)<-colnames(yrs)
+pchs<-c(0,1,2,6,15,17:19)
+plot(range(levels(factor(exp$PY))),c(0,max(yrs)),bty='l',type = 'n',
+     xlab="Year",ylab="Number of Studies",axes=FALSE)
+for(i in 1:ncol(yrs)){
+  points(levels(factor(exp$PY)),yrs[,i],col=alpha(cols[i],0.75),pch=pchs[i],cex=2) 
+  lines(levels(factor(exp$PY)),yrs[,i],col=alpha(cols[i],0.75),lty=ltys[i],lwd=2) 
+}
+legend("topleft",colnames(yrs),col=cols,lty=ltys,bty='n',lwd=2,pch=pchs,cex=2)
+axis(1,at=seq(1968,2018,10))
+axis(2,las=1)
+
+#try a bar chart
+bp<-barplot(t(yrs),col=cols,border = NA,axes=FALSE)
+legend("topleft",colnames(yrs),col=cols,bty='n',pch=15)
+text(label=rownames(yrs),bp,-2,xpd=TRUE,srt=90)
+axis(2,las=1,at=seq(0,30,5))
+mtext("Number of Studies",2,line=2)
+```
 
 ## Species
 
@@ -81,16 +184,52 @@ write.table(spcl[order(spcl$Class,spcl$Number.of.studies,decreasing=TRUE),c(3,1,
 
 ```
 
-## Experimental design
+## Categories
 
-What experimental designs were used, and how frequently?
+Of the experimental ones, how do they break down into categories? These categories are not mutually exclusive, and any one study may belong to multiple categories.
 
-```{r exp_design}
+```{r categories}
+cats<-count_filled_lines(exp,16:(ncol(exp)-1))#apply(exp[,16:(ncol(exp)-1)],2,function(c){ length(c[c!=""])})
+kable(cats[order(cats,decreasing = TRUE)],col.names = "Number of studies")
+write.table(cats[order(cats,decreasing = TRUE)],"QGB_categories.csv",sep=",")
+```
 
+"Reproduction and Fecundity" includes reproductive success and reproductive strategies, such as asexual/sexual/hermaphroditic sexual systems, monogamy vs polygyny, alternative mate choice tactics, oviposition/nesting preferences and timing, egg and milk production traits, physiological effects of mating, and other fecundity-related phenotypes. "Mate choice and sexual selection" includes pre and postcopulatory selective episodes as well as elements of display traits (e.g., male song in crickets) and female preferences. 
+
+Clearly personality traits have been widely studied.
+
+```{r cat_over_time}
+catyrs<-do.call(rbind,lapply(levels(factor(exp$PY)),function(year,exp,cats){
+  yr<-exp[exp$PY==year,]
+  cnts<-apply(yr[,names(cats)],2,function(d){ length(d[d!=""])})
+  return(cnts)
+},exp=exp,cats=cats))
+
+color <- c("#e6194b","#3cb44b","#ffe119","#0082c8","#f58231","#911eb3","#46f0f0","#f032e6","#d2f53c",
+           "#fabebe","#008080","#e6beff","#aa6e28","#fffac8","#800000","#aaffc3","#808000","#ffd8b1",
+           "#000080","#808080","#FFFFFF","#000000")
+#Don't include this one
+col<-color[1:length(catyrs)]
+bp<-barplot(t(catyrs),
+            col=col,las=1,border = NA,axes = FALSE)
+legend("topleft",colnames(catyrs),
+       col=col,bty='n',pch=15)
+axis(2,las=1,at=seq(0,50,10))
+text(bp,-2,xpd=TRUE,srt=90,labels = levels(factor(exp$PY)))
+mtext("Number of studies",2,line=2)
+
+col<-color[1:length(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")])]
+bp<-barplot(t(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")]),
+            col=col,las=1,border = NA,axes = FALSE)
+legend("topleft",colnames(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")]),
+       col=col,bty='n',pch=15)
+axis(2,las=1,at=seq(0,50,10))
+text(bp,-2,xpd=TRUE,srt=90,labels = levels(factor(exp$PY)))
+mtext("Number of studies",2,line=2)
 
 ```
 
-## Personality
+### Personality
 
 Let's focus on personality studies
 
@@ -132,13 +271,70 @@ dev.off()
 
 ![Personality Timeline](../qgb_data/figs/Personality_Timeline.png)
 
-Can I pull out studies that estimated heritability? I think I have to go through the papers themselves to do that.
 
-```{r personality_heritability}
-pers.h2<-search_line(c("heritability"," h ","h2"),"AB",pexp)
-pers.not.h2<-search_line(c("heritability"," h ","h2"),"AB",pexp,inverse = TRUE)
+### Plasticity
 
+I found `r nrow(exp[exp$Plasticity!="",])` studies that investigated plasticity, either explicitly setting out to do so or finding it emerge. I'd like to see how plasticity overlaps with other categories.
+
+```{r plasticity}
+plasticity<-exp[exp$Plasticity!="",]
+cnt<-count_filled_lines(plasticity,16:(ncol(plasticity)-1))
+#or proportionally
+prp<-count_filled_lines(plasticity,16:(ncol(plasticity)-1))/nrow(exp[exp$Plasticity!="",])
+kable(data.frame(names(cnt),cnt,prp,stringsAsFactors = FALSE),
+      col.names = c("Category","Number of studies","Proportion of those with plasticity"),row.names=FALSE)
 ```
 
-# Creating demonstration figures
+### IGE
 
+I found `r nrow(exp[exp$IGE!="",])` studies that investigated IGE, either explicitly setting out to do so or finding it emerge. I'd like to see how IGE overlaps with other categories.
+
+```{r ige}
+ige<-exp[exp$IGE!="",]
+cnt<-count_filled_lines(ige,16:(ncol(ige)-1))
+#or proportionally
+prp<-count_filled_lines(ige,16:(ncol(ige)-1))/nrow(exp[exp$IGE!="",])
+kable(data.frame(names(cnt),cnt,prp,stringsAsFactors = FALSE),
+      col.names = c("Category","Number of studies","Proportion of those with plasticity"),row.names=FALSE)
+```
+
+### GxE
+
+I found `r nrow(exp[exp$GxE!="",])` studies that investigated GxE effects, either explicitly setting out to do so or finding it emerge. I'd like to see how GxE overlaps with other categories.
+
+```{r gxe}
+gxe<-exp[exp$GxE!="",]
+cnt<-count_filled_lines(gxe,16:(ncol(gxe)-1))
+#or proportionally
+prp<-count_filled_lines(gxe,16:(ncol(gxe)-1))/nrow(exp[exp$GxE!="",])
+kable(data.frame(names(cnt),cnt,prp,stringsAsFactors = FALSE),
+      col.names = c("Category","Number of studies","Proportion of those with plasticity"),row.names=FALSE)
+```
+
+## Combine plots
+
+```{r years_plot}
+png("figs/YearPlots.png",height=6,width=6,res=300,units="in")
+par(mfrow=c(2,1),mar=c(0.5,2,1,2),oma=c(2,2,2,2))
+cols<-c('#d73027','#f46d43','#fdae61','#fee090','#e0f3f8','#abd9e9','#74add1','#4575b4')
+bp<-barplot(t(yrs),col=cols,border = NA,axes=FALSE,xaxt='n')
+legend(x = -1,y=31,c("Parent-offspring regression","Sibling designs","Clones","Cross-classified designs",
+                     "Selection experiments","Complex relatedness","Other designs", "Genetics"),
+       col=cols,bty='n',pch=15,xpd=TRUE)
+#text(label=rownames(yrs),bp,-3,xpd=TRUE,srt=90)
+axis(2,las=1,at=seq(0,30,5))
+par(mar=c(2,2,0.5,2))
+col<-color[1:length(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")])]
+bp<-barplot(t(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")]),
+            col=col,las=1,border = NA,axes = FALSE)
+legend(x = -1,y=51,c("Personality","Mate choice","Reproduction/Fecundity","Parental Care",
+                   "Communication","Foraging","Predator avoidance", "Locomotion", "Migration",
+                   "Life History","Social behavior", "Cooperation","Learning"),
+       col=col,bty='n',pch=15,ncol=2)
+axis(2,las=1,at=seq(0,50,10))
+text(bp,-5,xpd=TRUE,srt=90,labels = levels(factor(exp$PY)))
+mtext("Number of studies",2,outer=TRUE)
+dev.off()
+```
+
+![Combined plots](../qgb_data/figs/YearPlots.png)
