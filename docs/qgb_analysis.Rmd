@@ -324,10 +324,10 @@ legend(x = -1,y=31,c("Parent-offspring regression","Sibling designs","Clones","C
 #text(label=rownames(yrs),bp,-3,xpd=TRUE,srt=90)
 axis(2,las=1,at=seq(0,30,5))
 par(mar=c(2,2,0.5,2))
-col<-color[1:length(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")])]
+col<-color[1:length(colnames(catyrs)[!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")])]
 bp<-barplot(t(catyrs[,!colnames(catyrs)%in%c("Plasticity","Phenotypic.gambit","IGE","GxE")]),
             col=col,las=1,border = NA,axes = FALSE)
-legend(x = -1,y=51,c("Personality","Mate choice","Reproduction/Fecundity","Parental Care",
+legend(x = -1,y=45,c("Personality","Mate choice","Reproduction/Fecundity","Parental Care",
                    "Communication","Foraging","Predator avoidance", "Locomotion", "Migration",
                    "Life History","Social behavior", "Cooperation","Learning"),
        col=col,bty='n',pch=15,ncol=2)
