@@ -20,7 +20,7 @@ library(knitr)
 orig.file<-data.frame(read.delim("qgb.txt",sep='\t',quote=""),stringsAsFactors = FALSE)
 ```
 
-The web of science search resulted in `r nrow(orig.file)` publications, which I saved in an Excel file and uploaded to Google Drive. In Google Drive I added columns to facilitate categorization and annotation of each abstract, and I added abstracts to those that did not have abstracts exported from Web of Science, when possible. Additionally, I removed any entries that did not pertain to evolutionary quantitative genetics and ignored studies on humans.
+The web of science search resulted in `r nrow(orig.file)` publications, which I saved in an Excel file and uploaded to Google Drive. In Google Drive I added columns to facilitate categorization and annotation of each abstract, and I added abstracts to those that did not have abstracts exported from Web of Science, when possible. Additionally, I removed any entries that did not pertain to evolutionary quantitative genetics and ignored studies on humans. 
 
 ```{r annotated_file}
 qgb<-data.frame(read.csv("qgb.csv",header = TRUE),stringsAsFactors = FALSE)
@@ -314,6 +314,10 @@ kable(data.frame(names(cnt),cnt,prp,stringsAsFactors = FALSE),
 ## Combine plots
 
 ```{r years_plot}
+#remove ones from 2018
+tw18<-which(rownames(yrs)==2018)
+yrs<-yrs[-tw18,]
+catyrs<-catyrs[-tw18,]
 png("figs/YearPlots.png",height=6,width=6,res=300,units="in")
 par(mfrow=c(2,1),mar=c(0.5,2,1,2),oma=c(2,2,2,2))
 cols<-color[1:ncol(yrs)]

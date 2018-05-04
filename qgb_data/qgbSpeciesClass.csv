@@ -1,0 +1,146 @@
+"Class","Species","Number.of.studies"
+"Rhabditophora","Dugesia japonica",1
+"Rhabditophora","All",1
+"Reptilia","All",6
+"Reptilia","Eretmochelys imbricata",1
+"Reptilia","Lacerta vivipara",1
+"Reptilia","Phrynosomatid",1
+"Reptilia","Thamnophis ordinoides",1
+"Reptilia","Thamnophis sirtalis",1
+"Reptilia","Zootoca vivipara",1
+"Mammalia","All",53
+"Mammalia","Mus musculus",22
+"Mammalia","Marmota flaviventris",5
+"Mammalia","Mus doemsticus",5
+"Mammalia","Macaca mulatta",3
+"Mammalia","Rattus norvegicus",3
+"Mammalia","Bos taurus",2
+"Mammalia","Peromyscus maniculatus",2
+"Mammalia","Tamiasciurus hudsonicus",2
+"Mammalia","Bos taurus and Ovis",1
+"Mammalia","Canis lupus",1
+"Mammalia","Canis rufus",1
+"Mammalia","Myodes glareolus",1
+"Mammalia","Octodon degus",1
+"Mammalia","Ovis canadensis",1
+"Mammalia","Pan troglodytes",1
+"Mammalia","Peromyscus polionotus and Peromyscus maniculatus",1
+"Mammalia","Phodopus sungorus",1
+"Malacostraca","All",2
+"Malacostraca","Asellus aquaticus",1
+"Malacostraca","Jassa marmorata",1
+"Insecta","All",106
+"Insecta","Drosophila melanogaster",29
+"Insecta","Callosobruchus maculatus",5
+"Insecta","Gryllus firmus",5
+"Insecta","Nicrophorus vespilloides",4
+"Insecta","Plutella xylostella",4
+"Insecta","Tribolium castaneum",3
+"Insecta","Apis",2
+"Insecta","Blattella germanica",2
+"Insecta","Gerris lacustris",2
+"Insecta","Gryllus bimaculatus",2
+"Insecta","Gryllus campestris",2
+"Insecta","Gryllus integer",2
+"Insecta","Musca domestica",2
+"Insecta","Sepsis cynipsea",2
+"Insecta","Teleogryllus commodus",2
+"Insecta","Acanthoscelides obtectus",1
+"Insecta","Achroia grisella",1
+"Insecta","Acyrthosiphon pisum",1
+"Insecta","Aedes aegypti",1
+"Insecta","Anagrus delicatus",1
+"Insecta","Aphidius ervi and Acyrthosiphon pisum",1
+"Insecta","Apis mellifera capensis",1
+"Insecta","Bactrocera cucurbitae",1
+"Insecta","Callosobruchus chinensis",1
+"Insecta","Choristoneura rosaceana",1
+"Insecta","Cydia poinonella",1
+"Insecta","Damaster blaptoides",1
+"Insecta","Diaeretiella rapae",1
+"Insecta","Drosophila elegans and D. gunungcola",1
+"Insecta","Drosophila pseudoobscura",1
+"Insecta","Drosophila silvestris",1
+"Insecta","Drosophila yakuba",1
+"Insecta","Enallagma spp.",1
+"Insecta","Epiphyas postvittana",1
+"Insecta","Euborellia plebeia",1
+"Insecta","Gryllus rubens and Gryllus texensis",1
+"Insecta","Harmonia axyridis",1
+"Insecta","Leptinotarsa decemlinneata",1
+"Insecta","Nasonia vitripennis",1
+"Insecta","Nauphoeta cinerea",1
+"Insecta","Neacoryphus bicrucis",1
+"Insecta","Nicrophorus orbicollis and Nicrophorus vespilloides",1
+"Insecta","Ophraella notulata and O. slobodkini",1
+"Insecta","Orgyia antiqua and O. leucostigma",1
+"Insecta","Pararge aegeria",1
+"Insecta","Pieris rapae",1
+"Insecta","Scathophaga stercoraria",1
+"Insecta","Sepsis neocynipsea",1
+"Insecta","Spodoptera exigua",1
+"Insecta","Tetrix undulata",1
+"Insecta","Triatoma williami",1
+"Insecta","Trichogramma nubilale",1
+"Insecta","Trichoplusia ni",1
+"Gastropoda","Physa acuta",2
+"Gastropoda","All",2
+"Chromadorea","Caenorhabditis elegans",6
+"Chromadorea","All",6
+"Chlorophyceae","Chlamydomonas reinhardtii",1
+"Chlorophyceae","All",1
+"Branchiopoda","All",4
+"Branchiopoda","Daphnia galeata and a hybrid",1
+"Branchiopoda","Daphnia magna",1
+"Branchiopoda","Daphnia pulex",1
+"Branchiopoda","Daphnia pulicaria",1
+"Aves","All",40
+"Aves","Taeniopygia guttata",9
+"Aves","Parus major",6
+"Aves","Passer domesticus",5
+"Aves","Gallus gallus domesticus",4
+"Aves","Cyanistes caeruleus",3
+"Aves","Larus michahellis",2
+"Aves","Aegithalos caudatus",1
+"Aves","Anser anser",1
+"Aves","Aves",1
+"Aves","Charadrius semipalmatus",1
+"Aves","Cyanistes caeruleus ",1
+"Aves","Diomedea exulans",1
+"Aves","Junco hyemalis",1
+"Aves","Paradisaea",1
+"Aves","Serinus canaria",1
+"Aves","Sterna hirundo",1
+"Aves","Strix aluco",1
+"Arachnida","All",9
+"Arachnida","Tetranychus urticae",4
+"Arachnida","Erigone atra",1
+"Arachnida","Glycyphagus privatus and G. ornatus",1
+"Arachnida","Ixodes ricinus",1
+"Arachnida","Pardosa purbeckensis",1
+"Arachnida","Schizocosa",1
+"Amphibia","All",7
+"Amphibia","Agalychnis callidryas",1
+"Amphibia","Ambystoma barbouri",1
+"Amphibia","Pseudacris triseriata",1
+"Amphibia","Pseudophryne corroboree",1
+"Amphibia","Rana clamitans",1
+"Amphibia","Rana sylvatica",1
+"Amphibia","Triturus montandoni",1
+"Actinopterygii","All",25
+"Actinopterygii","Poecilia reticulata",3
+"Actinopterygii","Astyanax mexicanus",2
+"Actinopterygii","Cichlidae",2
+"Actinopterygii","Danio rerio",2
+"Actinopterygii","Dicentrarchus labrax",2
+"Actinopterygii","Gasterosteus aculeatus",2
+"Actinopterygii","Oncorhynchus mykiss",2
+"Actinopterygii","Oncorhynchus tshawytscha",2
+"Actinopterygii","Gadus morhua",1
+"Actinopterygii","Lucania goodei",1
+"Actinopterygii","Poecilia latipinna",1
+"Actinopterygii","Salmo salar",1
+"Actinopterygii","Salmo trutta",1
+"Actinopterygii","Syngnathidae",1
+"Actinopterygii","Xiphophorus",1
+"Actinopterygii","Xiphophorus birchmanni",1
