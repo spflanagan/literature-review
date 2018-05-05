@@ -336,7 +336,7 @@ legend(x = -1,y=45,c("Personality","Mate choice","Reproduction/Fecundity","Paren
                    "Life History","Social behavior", "Cooperation","Learning"),
        col=col,bty='n',pch=15,ncol=2)
 axis(2,las=1,at=seq(0,50,10))
-text(bp,-5,xpd=TRUE,srt=90,labels = levels(factor(exp$PY)))
+text(bp,-5,xpd=TRUE,srt=90,labels = levels(factor(rownames(yrs)))
 mtext("Number of studies",2,outer=TRUE)
 dev.off()
 ```
